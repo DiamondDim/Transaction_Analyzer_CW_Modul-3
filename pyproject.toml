@@ -1,0 +1,37 @@
+[project]
+name = "transaction-analyzer-cw-modul-3"
+version = "0.1.0"
+description = "Курсовая работа: анализ банковских транзакций"
+authors = [
+    {name = "Дмитрий",email = "mecheny91@yandex.ru"}
+]
+readme = "README.md"
+
+
+requires-python = ">=3.13"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.0"
+openpyxl = "^3.1"
+requests = "^2.31"
+python-dotenv = "^1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4"
+pytest-cov = "^4.1"
+flake8 = "^6.1"
+isort = "^5.12"
+mypy = "^1.5"
+black = "^23.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
