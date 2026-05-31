@@ -111,6 +111,13 @@ class TestMain:
 
 
 class TestSettings:
-    def test_load_structure(self, mock_settings):
-        assert "user_currencies" in mock_settings
-        assert "user_stocks" in mock_settings
+    def test_load_user_settings_real(self):
+        """Проверяет, что файл настроек читается и имеет правильную структуру."""
+        settings = load_user_settings()  # Вызываем реальную функцию
+
+        assert "user_currencies" in settings
+        assert "user_stocks" in settings
+        assert isinstance(settings["user_currencies"], list)
+        assert isinstance(settings["user_stocks"], list)
+        # Проверяем, что валюты — строки
+        assert all(isinstance(c, str) for c in settings["user_currencies"])
