@@ -22,6 +22,9 @@ def save_report(filename: Optional[str] = None):
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
+            print(f"🔥 DEBUG: Декоратор вызван! Функция: {func.__name__}")
+            print(f"🔥 DEBUG: Аргументы: args={args}, kwargs={kwargs}")
+
             # Вызываем исходную функцию
             result = func(*args, **kwargs)
 
@@ -39,8 +42,10 @@ def save_report(filename: Optional[str] = None):
                 with open(report_name, "w", encoding="utf-8") as f:
                     json.dump(json_data, f, ensure_ascii=False, indent=2)
                 logger.info(f"Отчёт сохранён: {report_name}")
+                print(f"✅ DEBUG: Файл сохранён!")
             except Exception as e:
                 logger.error(f"Ошибка сохранения отчёта: {e}")
+                print(f"❌ DEBUG: Ошибка: {e}")
 
             return result
 
