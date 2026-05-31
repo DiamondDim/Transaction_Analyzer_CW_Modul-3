@@ -54,8 +54,6 @@ def save_report(filename: Optional[str] = None):
     return decorator
 
 
-@save_report(filename="spending_by_category_report.json")
-def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> pd.DataFrame:
     """
     Возвращает траты по заданной категории за последние три месяца.
     """
