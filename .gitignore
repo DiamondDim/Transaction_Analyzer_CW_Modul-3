@@ -197,3 +197,5 @@ cython_debug/
 
 # my file
 CHEATSHEET.md
+/spending_by_category_report.json
+test_check.py

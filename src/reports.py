@@ -1,3 +1,6 @@
+"""
+Модуль для формирования отчетов.
+"""
 import pandas as pd
 import json
 import logging
@@ -7,9 +10,6 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-"""
-Модуль для формирования отчетов.
-"""
 
 def save_report(filename: Optional[str] = None):
     """
@@ -18,7 +18,6 @@ def save_report(filename: Optional[str] = None):
     Без параметра: использует имя по умолчанию.
     С параметром: использует переданное имя файла.
     """
-
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
@@ -31,7 +30,7 @@ def save_report(filename: Optional[str] = None):
             # Определяем имя файла
             report_name = filename or f"report_{func.__name__}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
-            # Конвертируем DataFrame в JSON (если результат — DataFrame)
+            # Конвертируем DataFrame в JSON
             if isinstance(result, pd.DataFrame):
                 json_data = result.to_dict(orient="records")
             else:
@@ -39,29 +38,24 @@ def save_report(filename: Optional[str] = None):
 
             # Сохраняем в файл
             try:
+                # default=str автоматически превращает даты в строки при сохранении
                 with open(report_name, "w", encoding="utf-8") as f:
-                    json.dump(json_data, f, ensure_ascii=False, indent=2)
+                    json.dump(json_data, f, ensure_ascii=False, indent=2, default=str)
                 logger.info(f"Отчёт сохранён: {report_name}")
-                print(f"✅ DEBUG: Файл сохранён!")
+                print(f"✅ DEBUG: Файл сохранён: {report_name}")
             except Exception as e:
                 logger.error(f"Ошибка сохранения отчёта: {e}")
                 print(f"❌ DEBUG: Ошибка: {e}")
 
             return result
-
         return wrapper
-
     return decorator
 
 
-    """
-    Возвращает траты по заданной категории за последние три месяца.
-    """
-
-
+@save_report(filename="spending_by_category_report.json")
 def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> pd.DataFrame:
     """
-    Возвращает траты по задан категории за последние три месяца.
+    Возвращает траты по заданной категории за последние три месяца.
     """
     # 1. Определяем конечную дату
     end_date = pd.to_datetime(date) if date else pd.to_datetime("today")
@@ -87,6 +81,5 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: Option
     mask = (filtered[date_col] >= start_date) & (filtered[date_col] <= end_date)
     result = filtered.loc[mask].copy()
 
-    logger.info(
-        f"Категория '{category}': найдено {len(result)} транзакций за период {start_date.date()} — {end_date.date()}")
+    logger.info(f"Категория '{category}': найдено {len(result)} транзакций за период {start_date.date()} — {end_date.date()}")
     return result
