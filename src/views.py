@@ -96,7 +96,11 @@ def filter_transactions_by_date(transactions: pd.DataFrame, date_str: str) -> pd
         logger.warning("Колонка 'Дата операции' не найдена в данных")
         return df
 
-    df["Дата операции"] = pd.to_datetime(df["Дата операции"], errors="coerce")
+    df["Дата операции"] = pd.to_datetime(
+        df["Дата операции"],
+        errors="coerce",
+        dayfirst=True  # ✅ Убирает warning
+    )
     target = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     start_month = target.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
