@@ -21,6 +21,8 @@ def save_report(filename: Optional[str] = None):
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
+            print(f"🔥 DEBUG: Декоратор вызван! Функция: {func.__name__}")
+            print(f"🔥 DEBUG: Аргументы: args={args}, kwargs={kwargs}")
 
             # Вызываем исходную функцию
             result = func(*args, **kwargs)

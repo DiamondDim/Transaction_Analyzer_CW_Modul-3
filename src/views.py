@@ -89,23 +89,32 @@ def load_transactions(file_path: str | Path) -> pd.DataFrame:
 
 
 def filter_transactions_by_date(transactions: pd.DataFrame, date_str: str) -> pd.DataFrame:
-    """Фильтрует транзакции: от начала месяца до указанной даты."""
+    """
+    Фильтрует транзакции: от начала месяца до указанной даты (включительно).
+    Работает как с реальными данными (строки), так и с тестовыми (datetime).
+    """
     df = transactions.copy()
 
     if "Дата операции" not in df.columns:
         logger.warning("Колонка 'Дата операции' не найдена в данных")
         return df
 
-    df["Дата операции"] = pd.to_datetime(
-        df["Дата операции"],
-        errors="coerce",
-        dayfirst=True  # ✅ Убирает warning
-    )
+    # Приводим колонку к datetime (без dayfirst — чтобы не ломать тесты с ISO-форматом)
+    df["Дата операции"] = pd.to_datetime(df["Дата операции"], errors="coerce")
+
+    # Парсим целевую дату из строки формата "YYYY-MM-DD HH:MM:SS"
     target = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     start_month = target.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
-    mask = (df["Дата операции"] >= start_month) & (df["Дата операции"] <= target)
-    return df[mask].dropna(subset=["Дата операции"])
+    # Создаём маску: дата >= начало месяца И дата <= целевая дата
+    # Отбрасываем NaT (невалидные даты) через notna()
+    mask = (
+            df["Дата операции"].notna() &
+            (df["Дата операции"] >= start_month) &
+            (df["Дата операции"] <= target)
+    )
+
+    return df[mask].copy()
 
 
 def get_card_info(transactions: pd.DataFrame) -> List[Dict[str, Any]]:
