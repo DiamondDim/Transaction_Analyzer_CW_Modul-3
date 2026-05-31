@@ -199,3 +199,4 @@ cython_debug/
 CHEATSHEET.md
 /spending_by_category_report.json
 test_check.py
+/check_json.py
