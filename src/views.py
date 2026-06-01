@@ -3,13 +3,14 @@
 """
 import json
 import logging
-import requests
 from datetime import datetime
-from typing import Any, List, Dict
 from pathlib import Path
-import pandas as pd
+from typing import Any, Dict, List
 
-from .utils import get_greeting  # ✅ Импорт из utils, дубль удалён
+import pandas as pd
+import requests
+
+from .utils import get_greeting
 
 logger = logging.getLogger(__name__)
 
@@ -109,9 +110,9 @@ def filter_transactions_by_date(transactions: pd.DataFrame, date_str: str) -> pd
     # Создаём маску: дата >= начало месяца И дата <= целевая дата
     # Отбрасываем NaT (невалидные даты) через notna()
     mask = (
-            df["Дата операции"].notna() &
-            (df["Дата операции"] >= start_month) &
-            (df["Дата операции"] <= target)
+        df["Дата операции"].notna()
+        & (df["Дата операции"] >= start_month)
+        & (df["Дата операции"] <= target)
     )
 
     return df[mask].copy()

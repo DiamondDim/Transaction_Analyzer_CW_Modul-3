@@ -200,3 +200,5 @@ CHEATSHEET.md
 /spending_by_category_report.json
 test_check.py
 /check_json.py
+/debug_regex.py
+/test_imports.py
